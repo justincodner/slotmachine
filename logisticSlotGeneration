@@ -1,0 +1,64 @@
+Web VPython 3.2
+
+numSlots = 3
+numFruits = 10
+epsilon = 2.22*exp(10, -16)
+
+def logistic(r, X):
+    return r*X*(1-X)
+
+
+scene.append_to_caption("Number of Slots:\n")
+slotsSlider = slider(bind = setSlots, min = 3, max = 5, step = 1)
+slotsLabel = wtext(text = "3\n")
+
+spinButton = button(bind = run, text = "GAMBLE")
+
+def setSlots():
+    global numSlots 
+    numSlots = slotsSlider.value
+    slotsLabel.text = f"{slotsSlider.value}\n"
+ 
+ 
+ 
+
+def run():
+    numSpins = int(input("How Many Spins"))
+    growthRate = 4
+    r = growthRate
+    
+    spins = []
+    
+    for i in range(numSlots):
+        X = random(epsilon, 1)
+        seeds = [X]
+        for j in range(1, numSpins * 2):
+            seeds.append(logistic(r, seeds[j-1]))
+        slot = []
+        attempt = 0
+        while(int(len(slot)) < numSpins):
+            l = seeds[attempt]
+            if l >= 0.1 and l < 0.9:
+                slot.append(l)
+            attempt += 1
+        spins.append(slot)
+    spins = [list(spun) for spun in zip(*spins)]
+    
+    for e in spins:
+        print(e)
+        
+    print("Count: " + counter(spins))
+    
+        
+def counter(spins):
+    count = []
+    for l in range(1, numFruits + 1):
+        counter = 0
+        for i in range(len(spins)):
+            for j in range(len(spins[i])):
+                if spins[i][j] < 0.1+(l*0.08) and spins[i][j] >= 0.1+((l-1)*0.08):
+                    counter += 1
+        count.append(counter)
+    return(count)
+    
+    
