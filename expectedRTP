@@ -1,0 +1,45 @@
+Web VPython 3.2
+
+expectedRtp = 0
+
+
+#Currently just here as a place holder, I will assign probabilities to these later
+doubleDiamondProb = 0.012
+sevenProb = 0.03
+tripleBarProb = 0.060
+doubleBarProb = 0.080
+singleBarProb = 0.120
+cherryProb = 0.150
+blankProb = 0.548
+
+
+#adding up the expected probabilities for the basic wins
+expectedRTP+= doubleDiamondProb**3 * 1000
+expectedRTP+= sevenProb**3 * 80
+expectedRTP+= tripleBarProb**3 * 40
+expectedRTP+= doubleBarProb**3 * 25
+expectedRTP+= singleBarProb**3 * 10
+expectedRTP+= cherryProb ** 3 * 10
+expectedRTP+= 3 * cherryProb ** 2 * (1-cherryProb - doubleDiamondProb) * 5
+expectedRTP+= 3 * cherryProb * (1-cherryProb - doubleDiamondProb) * 2
+expectedRTP+= ((tripleBarProb+doubleBarProb+singleBarProb) **3 - tripleBarProb**3 - doubleBarProb**3 - singleBarProb**3) * 5
+
+
+#adding up the expected probabilities for a win completed by one double diamond where win is 2x
+
+expectedRTP = 3 * doubleDiamond * sevenProb ** 2 * 160 
+expectedRTP = 3 * doubleDiamond * tripleBarProb ** 2 * 80
+expectedRTP = 3 * doubleDiamond * doubleBarProb ** 2 * 50
+expectedRTP = 3 * doubleDiamond * singleBarProb ** 2 * 20
+expectedRTP = 3 * doubleDiamond * cherryProb ** 2 * 20
+
+expectedRTP = 3 * doubleDiamond * ((tripleBarProb + doubleBarProb + singleBarProb) ** 2 - tripleBarProb**2 - doubleBarProb**2 - singleBarProb**2) * 10
+expectedRTP = 3 * doubleDiamond * 2 * cherryProb * (1-cherryProb - doubleDiamondProb) * 10
+
+
+#adding up the expected probabilities for a win completed by two double diamond where the win is 4x
+expectedRTP = 3 * doubleDiamond**2 * sevenProb * 320
+expectedRTP = 3 * doubleDiamond**2 * tripleBarProb * 160
+expectedRTP = 3 * doubleDiamond**2 * doubleBarProb * 100
+expectedRTP = 3 * doubleDiamond**2 * singleBarProb * 40
+expectedRTP = 3 * doubleDiamond**2 * cherryProb * 40
