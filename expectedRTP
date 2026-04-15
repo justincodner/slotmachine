@@ -99,3 +99,12 @@ def normalDistribution(t, n):
     mean = expectedRTP
     value = (1/(mean * (2*pi)**2)) * exp((-1/2)((x-mew)/(mean))**2)
     return value
+
+mycanvas = graph(title = "Probability Distribution", xtitle = "Return To Player", ytitle = "Probability")
+
+normalCurve = gcurve(graph = mycanvas)
+
+n=1000
+for i in range(-10,11,.01):
+    normalCurve.plot(i, normalDistribution(i,n))
+
