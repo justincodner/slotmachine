@@ -1,6 +1,6 @@
 Web VPython 3.2
 
-expectedRtp = 0
+expectedRTP = 0
 
 
 #Currently just here as a place holder, I will assign probabilities to these later
@@ -9,8 +9,8 @@ sevenProb = 0.03
 tripleBarProb = 0.060
 doubleBarProb = 0.080
 singleBarProb = 0.120
-cherryProb = 0.150
-blankProb = 0.548
+cherryProb = 0.110
+blankProb = 0.588
 
 
 #adding up the expected probabilities for the basic wins
@@ -21,25 +21,81 @@ expectedRTP+= doubleBarProb**3 * 25
 expectedRTP+= singleBarProb**3 * 10
 expectedRTP+= cherryProb ** 3 * 10
 expectedRTP+= 3 * cherryProb ** 2 * (1-cherryProb - doubleDiamondProb) * 5
-expectedRTP+= 3 * cherryProb * (1-cherryProb - doubleDiamondProb) * 2
+expectedRTP+= 3 * cherryProb * (1-cherryProb - doubleDiamondProb)**2 * 2
 expectedRTP+= ((tripleBarProb+doubleBarProb+singleBarProb) **3 - tripleBarProb**3 - doubleBarProb**3 - singleBarProb**3) * 5
 
 
 #adding up the expected probabilities for a win completed by one double diamond where win is 2x
 
-expectedRTP = 3 * doubleDiamond * sevenProb ** 2 * 160 
-expectedRTP = 3 * doubleDiamond * tripleBarProb ** 2 * 80
-expectedRTP = 3 * doubleDiamond * doubleBarProb ** 2 * 50
-expectedRTP = 3 * doubleDiamond * singleBarProb ** 2 * 20
-expectedRTP = 3 * doubleDiamond * cherryProb ** 2 * 20
+expectedRTP += 3 * doubleDiamondProb * sevenProb ** 2 * 160 
+expectedRTP += 3 * doubleDiamondProb * tripleBarProb ** 2 * 80
+expectedRTP += 3 * doubleDiamondProb * doubleBarProb ** 2 * 50
+expectedRTP += 3 * doubleDiamondProb * singleBarProb ** 2 * 20
+expectedRTP += 3 * doubleDiamondProb * cherryProb ** 2 * 20
 
-expectedRTP = 3 * doubleDiamond * ((tripleBarProb + doubleBarProb + singleBarProb) ** 2 - tripleBarProb**2 - doubleBarProb**2 - singleBarProb**2) * 10
-expectedRTP = 3 * doubleDiamond * 2 * cherryProb * (1-cherryProb - doubleDiamondProb) * 10
+expectedRTP += 3 * doubleDiamondProb * ((tripleBarProb + doubleBarProb + singleBarProb) ** 2 - tripleBarProb**2 - doubleBarProb**2 - singleBarProb**2) * 10
+expectedRTP += 3 * doubleDiamondProb * 2 * cherryProb * (1-cherryProb - doubleDiamondProb) * 10
 
 
 #adding up the expected probabilities for a win completed by two double diamond where the win is 4x
-expectedRTP = 3 * doubleDiamond**2 * sevenProb * 320
-expectedRTP = 3 * doubleDiamond**2 * tripleBarProb * 160
-expectedRTP = 3 * doubleDiamond**2 * doubleBarProb * 100
-expectedRTP = 3 * doubleDiamond**2 * singleBarProb * 40
-expectedRTP = 3 * doubleDiamond**2 * cherryProb * 40
+expectedRTP += 3 * doubleDiamondProb**2 * sevenProb * 320
+expectedRTP += 3 * doubleDiamondProb**2 * tripleBarProb * 160
+expectedRTP += 3 * doubleDiamondProb**2 * doubleBarProb * 100
+expectedRTP += 3 * doubleDiamondProb**2 * singleBarProb * 40
+expectedRTP += 3 * doubleDiamondProb**2 * cherryProb * 40
+
+
+
+variance = 0
+
+#calculating variance from non bonus wins
+variance += (doubleDiamondProb**3) * (1000 - expectedRTP)**2
+variance += (sevenProb**3) * (80 - expectedRTP)**2
+variance += (tripleBarProb**3) * (40 - expectedRTP)**2
+variance += (doubleBarProb**3) * (25 - expectedRTP)**2
+variance += (singleBarProb**3) * (10 - expectedRTP)**2
+variance += (cherryProb**3) * (10 - expectedRTP)**2
+variance += (3 * cherryProb**2 * (1 - cherryProb - doubleDiamondProb)) * (5 - expectedRTP)**2
+variance += (3 * cherryProb * (1 - cherryProb - doubleDiamondProb)**2) * (2 - expectedRTP)**2
+variance += ((tripleBarProb + doubleBarProb + singleBarProb)**3 - tripleBarProb**3 - doubleBarProb**3 - singleBarProb**3) * (5 - expectedRTP)**2
+
+#variance with wins with a diamond
+variance += (3 * doubleDiamondProb * sevenProb**2) * (160 - expectedRTP)**2
+variance += (3 * doubleDiamondProb * tripleBarProb**2) * (80 - expectedRTP)**2
+variance += (3 * doubleDiamondProb * doubleBarProb**2) * (50 - expectedRTP)**2
+variance += (3 * doubleDiamondProb * singleBarProb**2) * (20 - expectedRTP)**2
+variance += (3 * doubleDiamondProb * cherryProb**2) * (20 - expectedRTP)**2
+variance += (3 * doubleDiamondProb * ((tripleBarProb + doubleBarProb + singleBarProb)**2 - tripleBarProb**2 - doubleBarProb**2 - singleBarProb**2)) * (10 - expectedRTP)**2
+variance += (3 * doubleDiamondProb * 2 * cherryProb * (1 - cherryProb - doubleDiamondProb)) * (10 - expectedRTP)**2
+
+#variance with wins with 2 diamonds
+variance += (3 * doubleDiamondProb**2 * sevenProb) * (320 - expectedRTP)**2
+variance += (3 * doubleDiamondProb**2 * tripleBarProb) * (160 - expectedRTP)**2
+variance += (3 * doubleDiamondProb**2 * doubleBarProb) * (100 - expectedRTP)**2
+variance += (3 * doubleDiamondProb**2 * singleBarProb) * (40 - expectedRTP)**2
+variance += (3 * doubleDiamondProb**2 * cherryProb) * (40 - expectedRTP)**2
+
+# calculating probability of there being no win for the variance
+winProb = 0
+winProb += doubleDiamondProb**3 + sevenProb**3 + tripleBarProb**3 + doubleBarProb**3 + singleBarProb**3 + cherryProb**3
+winProb += 3 * cherryProb**2 * (1 - cherryProb - doubleDiamondProb)
+winProb += 3 * cherryProb * (1 - cherryProb - doubleDiamondProb)**2
+winProb += ((tripleBarProb + doubleBarProb + singleBarProb)**3 - tripleBarProb**3 - doubleBarProb**3 - singleBarProb**3)
+winProb += 3 * doubleDiamondProb * sevenProb**2 + 3 * doubleDiamondProb * tripleBarProb**2 + 3 * doubleDiamondProb * doubleBarProb**2 + 3 * doubleDiamondProb * singleBarProb**2 + 3 * doubleDiamondProb * cherryProb**2
+winProb += 3 * doubleDiamondProb * ((tripleBarProb + doubleBarProb + singleBarProb)**2 - tripleBarProb**2 - doubleBarProb**2 - singleBarProb**2)
+winProb += 3 * doubleDiamondProb * 2 * cherryProb * (1 - cherryProb - doubleDiamondProb)
+winProb += 3 * doubleDiamondProb**2 * sevenProb + 3 * doubleDiamondProb**2 * tripleBarProb + 3 * doubleDiamondProb**2 * doubleBarProb + 3 * doubleDiamondProb**2 * singleBarProb + 3 * doubleDiamondProb**2 * cherryProb
+
+lossProb = 1 - winProb
+variance += lossProb * (0 - expectedRTP)**2
+
+print(expectedRTP)
+print(variance)
+
+
+
+def normalDistribution(t, n):
+    mew = (variance ** (1/2)) / (n ** (1/2))
+    mean = expectedRTP
+    value = (1/(mean * (2*pi)**2)) * exp((-1/2)((x-mew)/(mean))**2)
+    return value
