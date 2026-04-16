@@ -95,16 +95,28 @@ print(variance)
 
 
 def normalDistribution(t, n):
-    mew = (variance ** (1/2)) / (n ** (1/2))
+    sigma = variance ** .5 / n ** .5
     mean = expectedRTP
-    value = (1/(mean * (2*pi)**2)) * exp((-1/2)((x-mew)/(mean))**2)
+    value = (1/(sigma * (2*pi)**.5)) * exp(-.5*((t-mean)**2)/(sigma**2))
     return value
+
 
 mycanvas = graph(title = "Probability Distribution", xtitle = "Return To Player", ytitle = "Probability")
 
 normalCurve = gcurve(graph = mycanvas)
 
 n=1000
-for i in range(-10,11,.01):
+for i in range(expectedRTP- 4 * variance ** .5 / n ** .5,expectedRTP+4 * variance ** .5 / n ** .5,.01):
     normalCurve.plot(i, normalDistribution(i,n))
+    
+confidenceCanvas = graph(title = "Probability Distribution", xtitle = "Return To Player", ytitle = "Probability")
 
+normalCurve2 = gcurve(graph = confidenceCanvas)
+area = gvbars(color=color.red, delta=0.001)
+
+n=1000
+for i in range(expectedRTP- 4 * variance ** .5 / n ** .5,expectedRTP+4 * variance ** .5 / n ** .5,.01):
+    normalCurve2.plot(i, normalDistribution(i,n))
+    
+for i in range(expectedRTP- 1.96 * variance ** .5 / n ** .5,expectedRTP+1.96 * variance ** .5 / n ** .5,.001):
+    area.plot(i, normalDistribution(i,n))
